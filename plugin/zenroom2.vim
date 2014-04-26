@@ -24,6 +24,8 @@ if exists( "&background" )
 endif
 
 function! s:markdown_room()
+    " Use solarized because it looks good. Could make this an option
+    colorscheme solarized
     set background=light
     set linespace=8
 
@@ -48,10 +50,10 @@ function! s:markdown_room()
     hi Cursor guibg=#15abdd
 
     if has('gui_running')
-        let l:highlightbgcolor = "guibg=#f2f2f2" 
+        let l:highlightbgcolor = "guibg=#f2f2f2"
         let l:highlightfgbgcolor = "guifg=#f2f2f2" . " " . l:highlightbgcolor
     else
-        let l:highlightbgcolor = "ctermbg=bg" 
+        let l:highlightbgcolor = "ctermbg=bg"
         let l:highlightfgbgcolor = "ctermfg=bg" . " " . l:highlightbgcolor
     endif
 
@@ -69,6 +71,8 @@ function! g:zenroom_goyo_before()
     let is_mark_or_rst = &filetype == "markdown" || &filetype == "rst" || &filetype == "text"
 
     if is_mark_or_rst
+        " Save current color scheme so it can be restored on exit
+        let s:colors_name = g:colors_name
         call s:markdown_room()
     endif
 endfunction
@@ -84,6 +88,7 @@ function! g:zenroom_goyo_after()
         if s:save_background != ""
             exec( "set background=" . s:save_background )
         endif
+        exec( "colorscheme " . s:colors_name )
     endif
 endfunction
 
